@@ -1,2 +1,2 @@
 # canvas-demo
-canvas demo
+simple canvas demos
