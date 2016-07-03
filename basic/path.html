@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>Canvas画图基础-路径</title>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="500" ></canvas>
+	<canvas id="canvas1" width="500" height="500" ></canvas>
+</body>
+
+<style type="text/css">
+	body {background-color: #ccc;}
+</style>
+<script type="text/javascript">
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext('2d');
+
+	ctx.beginPath();
+	ctx.lineWidth = 7;
+
+	ctx.strokeStyle = '#ff4444';
+	ctx.arc(80, 80, 50, 0 ,Math.PI*2);
+	ctx.stroke();
+
+	ctx.beginPath(); // 开一条新路
+
+	ctx.moveTo(170, 120);
+
+	ctx.strokeStyle = '#000';
+	ctx.arc(120, 120, 50, 0 ,Math.PI*2);
+	ctx.stroke(); // 再画圆
+</script>
+
+<script type="text/javascript">
+	var canvas = document.getElementById("canvas1");
+	var ctx1 = canvas.getContext('2d');
+	ctx1.lineWidth = 7;
+
+	function draw(ctx, x) {
+	        ctx.clearRect(0, 0, 500, 500);
+	        ctx.beginPath();
+	        ctx.strokeStyle = '#ff4444';
+	        if (x < Math.PI*2) {
+	            x += 0.05;
+	        } else {
+	            x = 0;
+	        }
+	        ctx.arc(80, 80, 50, 0, x, false); // 顺时针画圆
+	        ctx.stroke();
+	        ctx.beginPath();
+	        ctx.strokeStyle = '#000';
+	        ctx.arc(200, 80, 50, 0, x, true); // 逆时针画圆
+	        ctx.stroke();
+	        requestAnimationFrame(function () {
+	            draw(ctx, x);
+	        });
+	}
+	
+	requestAnimationFrame(function () {
+	        draw(ctx1, 0);
+	});
+</script>
+
+</html>

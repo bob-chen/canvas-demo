@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>Canvas画图基础-矩形</title>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="500" ></canvas>
+</body>
+
+<style type="text/css">
+	body {background-color: #ccc;}
+</style>
+<script type="text/javascript">
+	var canvas1 = document.getElementById("canvas");
+	var ctx = canvas1.getContext('2d');
+
+	// ctx.lineWidth = 5;
+	ctx.strokeStyle = '#ff4444'; 
+	ctx.fillStyle = '#000';                         
+    ctx.fillRect(100,100,100,100);
+    ctx.clearRect(120,120,60,60);
+    ctx.strokeRect(80,80,140,140);
+
+	ctx.beginPath();
+	ctx.rect(80, 250, 100, 100);
+	ctx.stroke();
+</script>
+
+
+</html>
