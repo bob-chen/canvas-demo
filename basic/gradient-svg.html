@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>一个比想象中更骚气的圆-svg实现</title>
+</head>
+<body>
+	<!-- 线性渐变 -->
+	<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+		 width="595.28px" height="841.89px" viewBox="0 0 595.28 841.89" enable-background="new 0 0 595.28 841.89" xml:space="preserve">
+	<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="213.0787" y1="303.3227" x2="384.1807" y2="303.3227">
+		<stop  offset="0.107" style="stop-color:#00A29A"/>
+		<stop  offset="0.1301" style="stop-color:#28A891"/>
+		<stop  offset="0.1968" style="stop-color:#76B874"/>
+		<stop  offset="0.2649" style="stop-color:#9FC758"/>
+		<stop  offset="0.3339" style="stop-color:#BBD338"/>
+		<stop  offset="0.4041" style="stop-color:#CDDA06"/>
+		<stop  offset="0.4761" style="stop-color:#D7DE00"/>
+		<stop  offset="0.5527" style="stop-color:#DAE000"/>
+		<stop  offset="0.9265" style="stop-color:#F39800"/>
+	</linearGradient>
+	<circle fill="none" stroke="url(#SVGID_1_)" stroke-width="16" stroke-miterlimit="10" cx="306.385" cy="355.208" r="77.551"/>
+	</svg>
+
+	<!-- 非对称渐变 -->
+	<svg height="108" width="108" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+	  <defs>
+	    <pattern id="fill-img" patternUnits="userSpaceOnUse" width="108" height="108">
+	      <image xlink:href="data:image/png;base64,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"
+	        x="0" y="0" width="108" height="108"  transform="rotate(84 54 54)">
+	      </image>
+
+	    </pattern>
+	  </defs>
+
+	   <circle fill="none" stroke="#e5ece7" stroke-width="10" stroke-miterlimit="1" cx="54" cy="54" r="49"/>
+	   
+	   <circle fill="none" stroke="url(#fill-img)" stroke-width="10" stroke-miterlimit="1" cx="54" cy="54" r="49"  stroke-dasharray="308 1000" stroke-dashoffset="308" stroke-linecap="round" transform="rotate(-88 54 54)">
+	   		<animate attributeName="stroke-dashoffset" begin="0s" dur="1.5s" from="308" to="0" repeatCount="indefinite" />
+	   </circle>
+	</svg>
+
+	<svg height="108" width="108" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+	  <defs>
+	    <pattern id="fill-img" patternUnits="userSpaceOnUse" width="108" height="108">
+	      <image xlink:href="data:image/png;base64,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"
+	        x="0" y="0" width="108" height="108"  transform="rotate(84 54 54)">
+	      </image>
+
+	    </pattern>
+	  </defs>
+
+	   <circle fill="none" stroke="#e5ece7" stroke-width="10" stroke-miterlimit="1" cx="54" cy="54" r="49"/>
+	   
+	   <circle class="animate-item" fill="none" stroke="url(#fill-img)" stroke-width="10" stroke-miterlimit="1" cx="54" cy="54" r="49"  stroke-dasharray="308 1000" stroke-dashoffset="308" stroke-linecap="round" transform="rotate(-88 54 54)">
+	   </circle>
+	</svg>
+</body>
+
+<style type="text/css">
+	.animate-item {
+		transition: stroke-dashoffset 1.5s ease;
+	}
+</style>
+<script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script type="text/javascript">
+	$(
+		setTimeout(function(){
+			$(".animate-item").css("stroke-dashoffset",94);
+		}, 10000)
+	);
+</script>
+
+
+</html>
