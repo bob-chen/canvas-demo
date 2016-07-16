@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>Canvas画图基础-鼠标涂鸦</title>
+</head>
+<body>
+	<button id="clear">清空</button>
+	<button id="save">保存</button>
+	<canvas id="canvas" width="300" height="300" ></canvas>
+</body>
+
+<style type="text/css">
+	* {margin:0; padding:0;}
+	body {background-color: #fff;}
+	button {
+		padding: 5px;
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	}
+	#save {
+		left: 60px;
+	}
+</style>
+
+
+<script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var canvas = $("#canvas"),
+			ctx = canvas[0].getContext('2d'),
+			winWidth = $(window).width(),
+			winHeight = $(window).height();
+
+		canvas.attr('width',winWidth).attr("height",winHeight);
+
+		ctx.fillStyle = '#fff';     
+		ctx.fillRect(0,0,winWidth,winHeight);
+
+		var running = "",  // draw
+			offset = canvas.offset();
+
+		canvas.on("mousedown",function(e){
+			var sx = e.pageX - offset.left,  //做个换算以防万一
+				sy = e.pageY - offset.top;
+
+			running = "draw";
+			ctx.beginPath();
+			ctx.moveTo(sx,sy);
+		});
+
+		canvas.on("mousemove", function(e){
+			if(running == "draw"){
+				toDraw(e.pageX-offset.left, e.pageY-offset.top)
+			}
+		});
+
+		canvas.on("mouseup", function(e){
+			running= "";
+		});
+
+		function toDraw(x, y){
+			ctx.lineTo(x,y); // 画路径
+			ctx.lineWidth = 5;
+			ctx.strokeStyle = "#ff4444";
+			ctx.stroke();	// 描边
+			ctx.save();		// 保存状态
+		}
+
+		$("#clear").click(function(){
+            ctx.clearRect(0, 0, winWidth, winHeight);
+            ctx.fillRect(0,0,winWidth,winHeight);
+        });
+
+		$("#save").click(function(){
+			$("img").remove();
+
+			var img = new Image();
+			img.src = canvas[0].toDataURL("image/jpeg", 1);
+
+			$("body").append(img);
+		});
+
+	})
+
+</script>
+
+
+
+
+</html>
