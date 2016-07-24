@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>Canvas画图基础-用鼠标移动图形</title>
+</head>
+<body>
+	<canvas id="canvas" width="300" height="300" ></canvas>
+</body>
+
+<style type="text/css">
+	* {margin:0; padding:0;}
+	body {background-color: #fff; padding: 20px;}
+	#canvas{
+		margin-top: 10px;
+		display:block;
+		clear:both;
+		border:1px solid #ccc;
+	}
+</style>
+
+
+<script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var canvas = $("#canvas"),
+			ctx = canvas[0].getContext('2d'),
+			winWidth = $(window).width(),
+			winHeight = $(window).height(),
+			moveItem = null,
+			startPos = {},
+			moving = false;
+
+		// canvas.attr('width',winWidth).attr("height",winHeight);
+
+		ctx.strokeStyle = '#000';
+		ctx.lineWidth = 2;
+
+		var getCanvasPoint = function(x,y) {
+			var canvasOffset = canvas.offset();
+			return {
+				x: x - canvasOffset.left,
+				y: y - canvasOffset.top
+			}
+		}
+
+		var rectList = [ [50,50,50,50], [120,120,80,60], [30,150,60,80] ];
+
+		var drawRect = function(x,y,w,h){
+			ctx.beginPath();
+			ctx.rect(x,y,w,h);	
+		}
+		
+		// init
+		ctx.clearRect(0, 0,canvas.width(), canvas.height());
+		$.each(rectList, function(n,v){
+			drawRect(rectList[n][0],rectList[n][1],rectList[n][2],rectList[n][3]);
+			ctx.stroke();
+		});
+		
+
+		canvas.on("mousedown", function(e){
+			moving = true;
+			var point = getCanvasPoint(e.pageX, e.pageY);
+			$.each(rectList, function(n, v) {
+				drawRect(rectList[n][0],rectList[n][1],rectList[n][2],rectList[n][3]);
+				if(ctx.isPointInPath(point.x, point.y)){
+					moveItem = n;
+					startPos.x = point.x;
+					startPos.y = point.y;
+					ctx.strokeStyle = "#ff4444";
+				} else {
+					ctx.strokeStyle = "#000";
+				}
+				ctx.stroke();
+			})
+		});
+
+		canvas.on("mousemove", function(e){
+			if( !moving && moveItem == null ) {
+				return;
+			}
+			ctx.clearRect(0, 0,canvas.width(), canvas.height());
+			var point = getCanvasPoint(e.pageX, e.pageY);
+			$.each(rectList, function(n, v) {
+				var moveX = 0,
+					moveY = 0;
+
+				if(n !== moveItem ){
+					ctx.strokeStyle = "#000";
+				} else {
+					moveX = point.x - startPos.x;
+					moveY = point.y - startPos.y;
+
+					ctx.strokeStyle = "#ff4444";
+				}
+				drawRect(rectList[n][0] + moveX,rectList[n][1] + moveY,rectList[n][2],rectList[n][3]);
+				ctx.stroke();
+			})
+
+		});
+
+		canvas.on("mouseup", function(e){
+			moving = false;
+
+			$.each(rectList, function(n){
+				if (n == moveItem){
+					var point = getCanvasPoint(e.pageX, e.pageY);
+
+					rectList[n][0] += point.x - startPos.x;
+					rectList[n][1] += point.y - startPos.y;
+				}
+			});
+			startPos = {}
+			moveItem = null
+		});
+
+	})
+
+</script>
+
+
+
+
+</html>
