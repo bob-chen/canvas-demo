@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>Canvas粒子动画-Part3</title>
+</head>
+<body>
+	<div class="input-wrap">
+	    <input id="txt" type="text" name="" value="" placeholder="输入发射文字...">
+	    <button id="btn" class="btn">发射</button>
+	</div>
+	<canvas id="canvas" width="300" height="300" ></canvas>
+</body>
+
+<style type="text/css">
+	* {margin:0;padding:0;}
+	body {background-color: #f2f2f2;}
+	canvas {
+		display: block;
+	}
+	.input-wrap {
+		margin: 20px;
+	}
+	input {
+	    width: 100px;
+	    height: 30px;
+	    border: 1px solid #e0e0e0;
+	    background: 0 0;
+	    -webkit-appearance: none;
+	    outline: 0;
+	    margin-right: 10px;
+	    padding-left: 5px;
+	    box-sizing: border-box;
+	}
+	.btn {
+	    height: 30px;
+	    line-height: 30px;
+	    padding: 0 11px;
+	    min-width: 55px;
+	    display: inline-block;
+	    position: relative;
+	    text-align: center;
+	    font-size: 15px;
+	    vertical-align: top;
+	    -webkit-box-sizing: border-box;
+	    border: 1px solid #0baae4;
+	    border-radius: 3px;
+
+	    background-color: #18b4ed;
+	    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0.5,#1fbaf3),to(#18b4ed));
+	    color: #fff;
+	    -webkit-background-clip: padding-box;
+	    background-clip: padding-box;
+	    -webkit-appearance: none;
+	    outline: none;
+	}
+
+	.btn:active {
+		background: #1ca7da;
+		border-color: #1ca7da;
+		color: rgba(255,255,255,.5);
+	}
+</style>
+
+<script type="text/javascript">
+	var canvas = document.getElementById("canvas"),//$("#canvas"),
+		ctx = canvas.getContext('2d'),
+		winWidth = document.documentElement.clientWidth,
+		winHeight = document.documentElement.clientHeight;
+
+	canvas.width = winWidth;
+	canvas.height = winHeight;
+
+	ctx.textBaseline="top";
+
+	var fontSize = 500,
+		fontFamily = 'Helvetica Neue, Helvetica, Arial, sans-serif';
+
+	document.querySelector("#btn").addEventListener("click", function(){
+		init();
+	})
+
+	var dotList = [];
+	function init() {
+
+		var s = 0;
+		input = document.querySelector("#txt");
+
+		var l = input.value ? input.value : "Beta";
+		input.value = "";
+
+		// 有正在运行的动画要取消掉
+		if (rafId) cancelAnimationFrame(rafId);
+
+		setFontSize(fontSize);
+		s = Math.min(fontSize,
+		          (canvas.width / ctx.measureText(l).width) * 0.8 * fontSize, 
+		          (canvas.height / fontSize) * (isNumber(l) ? 1 : 0.5) * fontSize);
+		setFontSize(s);
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.fillText(l, 10, 0);
+
+		dotList = [];
+		handleCanvas();
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		draw2();
+	}
+
+	function setFontSize(s) {
+		ctx.font = s + 'px ' + fontFamily;
+	}
+	function isNumber(n) {
+		return !isNaN(parseFloat(n)) && isFinite(n);
+	}
+
+	function handleCanvas() {
+		var imgW = canvas.width,
+			imgH = canvas.height;
+
+		var imgData = ctx.getImageData(0, 0, imgW, imgH);
+		// console.log(imgData);
+
+		for(var x=0; x<imgData.width; x+=6) {
+			for(var y=0; y<imgData.height; y+=6) {
+				var i = (y*imgData.width + x) * 4;
+				if(imgData.data[i+3] > 128 && imgData.data[i] < 100){
+					var dot = new Dot(x, y, 2);
+					dotList.push(dot);
+				}
+			}
+		}
+	}
+
+
+	function Dot(centerX, centerY, radius) {
+		this.x = centerX;
+		this.y = centerY;
+		this.radius = radius;
+		this.frameNum = 0;
+		this.frameCount =  Math.ceil(3000 / 16.66);
+		this.sx = 400;
+		this.sy = 400;
+		this.delay = this.frameCount*Math.random();
+		this.delayCount = 0;
+	}
+
+
+	// t 当前时间
+	// b 初始值
+	// c 总位移
+	// d 总时间
+	function easeInOutCubic(t, b, c, d) {
+		if ((t/=d/2) < 1) return c/2*t*t*t + b;
+		return c/2*((t-=2)*t*t + 2) + b;
+	}
+
+	var rafId = null,
+		finishCount = 0;
+	function draw2() {
+		console.log(1);
+
+		ctx.clearRect(0, 0, winWidth, winHeight);
+		ctx.fillStyle = "#000";
+
+		var len = dotList.length,
+			curDot = null,
+			frameNum = 0,
+			frameCount = 0,
+			curX, curY;
+		finishCount = 0;
+		for(var i=0; i < len; i+=1) {
+			// 当前粒子
+			curDot = dotList[i];
+
+			// 获取当前的time和持续时间和延时
+			frameNum = curDot.frameNum;
+			frameCount = curDot.frameCount;
+
+			if(curDot.delayCount < curDot.delay){
+				curDot.delayCount += 1;
+				continue;
+			}
+
+			ctx.save();
+			ctx.beginPath();
+
+			if(frameNum < frameCount) {
+				curX = easeInOutCubic(frameNum, curDot.sx, curDot.x-curDot.sx, curDot.frameCount);
+				curY = easeInOutCubic(frameNum, curDot.sy, curDot.y-curDot.sy, curDot.frameCount);
+
+				ctx.arc(curX, curY, curDot.radius, 0, 2*Math.PI);
+				curDot.frameNum += 1;
+
+			} else {
+				ctx.arc(curDot.x, curDot.y, curDot.radius, 0, 2*Math.PI);
+				finishCount += 1;
+			}
+			ctx.fill();
+			ctx.restore();
+
+			if (finishCount >= len) {
+				cancelAnimationFrame(rafId);
+				return;
+			}
+		}
+		
+		rafId = requestAnimationFrame(draw2);
+	}
+
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
