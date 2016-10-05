@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>Canvas粒子动画-Part3</title>
+</head>
+<body>
+	<div class="input-wrap">
+	    <input id="txt" type="text" name="" value="" placeholder="输入发射文字...">
+	    <button id="btn" class="btn">发射</button>
+	</div>
+	<canvas id="canvas" width="300" height="300" ></canvas>
+	
+	<!--<script type="text/javascript" src="./particle-maker.js"></script>-->
+
+	<script src="//cdn.bootcss.com/seajs/3.0.2/sea.js"></script>
+</body>
+
+<style type="text/css">
+	* {margin:0;padding:0;}
+	body {background-color: #f2f2f2;}
+	canvas {
+		display: block;
+	}
+	.input-wrap {
+		margin: 20px;
+	}
+	input {
+	    width: 100px;
+	    height: 30px;
+	    border: 1px solid #e0e0e0;
+	    background: 0 0;
+	    -webkit-appearance: none;
+	    outline: 0;
+	    margin-right: 10px;
+	    padding-left: 5px;
+	    box-sizing: border-box;
+	}
+	.btn {
+	    height: 30px;
+	    line-height: 30px;
+	    padding: 0 11px;
+	    min-width: 55px;
+	    display: inline-block;
+	    position: relative;
+	    text-align: center;
+	    font-size: 15px;
+	    vertical-align: top;
+	    -webkit-box-sizing: border-box;
+	    border: 1px solid #0baae4;
+	    border-radius: 3px;
+
+	    background-color: #18b4ed;
+	    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0.5,#1fbaf3),to(#18b4ed));
+	    color: #fff;
+	    -webkit-background-clip: padding-box;
+	    background-clip: padding-box;
+	    -webkit-appearance: none;
+	    outline: none;
+	}
+
+	.btn:active {
+		background: #1ca7da;
+		border-color: #1ca7da;
+		color: rgba(255,255,255,.5);
+	}
+</style>
+
+<script type="text/javascript">
+	var canvas = document.getElementById("canvas"),
+		ctx = canvas.getContext('2d'),
+		winWidth = document.documentElement.clientWidth,
+		winHeight = document.documentElement.clientHeight;
+
+	canvas.width = winWidth;
+	canvas.height = winHeight;
+
+
+	document.querySelector("#btn").addEventListener("click", function(){
+		init();
+	})
+
+	function init() {
+
+		var s = 0;
+		input = document.querySelector("#txt");
+
+		// var l = input.value ? input.value : "Beta";
+
+		var l = input.value;
+		if( !input.value ) {
+			l = new Image();
+			l.src = "images.jpeg";
+		}
+
+		input.value = "";
+
+		// normal useage
+		// var particleMaker = new ParticleMaker({
+		// 	canvasId: "canvas",
+		// 	startX: 200,
+		// 	startY: 400,
+		// 	endX: 10,
+		// 	endY: 40,
+		// 	// mess: 10,
+		// 	// dotRadius: 3,
+		// 	content: l,
+		// 	fillColor: "#ff4444",
+		// 	effect: "easeOutQuad",
+		// 	onFinish: function(){
+		// 		console.log("onFinish");
+		// 		console.log(l);
+		// 	}
+		// });
+
+		// particleMaker.run();
+
+
+		// seajs useage
+		seajs.use("./particle-maker", function(ParticleMaker) {
+			var particleMaker = new ParticleMaker({
+				canvasId: "canvas",
+				startX: 200,
+				startY: 400,
+				endX: 10,
+				endY: 40,
+				// mess: 10,
+				// dotRadius: 3,
+				content: l,
+				fillColor: "#ff4444",
+				effect: "easeOutQuad",
+				onFinish: function() {
+					console.log("onFinish");
+					console.log(l);
+				}
+			});
+
+			particleMaker.run();
+		});
+
+	}
+
+
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
