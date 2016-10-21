@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<title>不一样的动图-APNG</title>
+</head>
+<body>
+	<img class="apng" id="apng-basketball" src="./apng-basketball.png">
+	
+	<div>
+		<img src="./elephant.gif">
+		<img class="apng" id="apng-elephant" src="./elephant.png">
+	</div>
+	<div>
+		<div class="color-item" style="background-color:red"></div>
+		<div class="color-item" style="background-color:yellow"></div>
+		<div class="color-item" style="background-color:black"></div>
+		<div class="color-item" style="background-color:white"></div>
+	</div>
+	<script type="text/javascript" src="./apng-canvas.min.js"></script>
+</body>
+
+<style type="text/css">
+	* {margin:0;padding:0;}
+	body {background-color: #fff; padding-top: 10px;}
+	.color-item {
+		display: inline-block;
+		vertical-align: top;
+		border: 2px solid black;
+		width: 30px;
+		height: 30px;
+		margin: 0 10px;
+		cursor: pointer;
+	}
+</style>
+
+<script type="text/javascript">
+	var imgs = document.querySelectorAll(".apng");
+	APNG.ifNeeded().then(function(){
+		for (var i=0; i < imgs.length; i++) {
+			APNG.animateImage(imgs[i]);
+		};
+		
+	});
+
+	var colorItems = document.querySelectorAll(".color-item");
+
+	for (var i=0; i < colorItems.length; i++) {
+		colorItems[i].onclick = function(){
+			var color = this.style.backgroundColor;
+			document.body.style.backgroundColor = color;
+		}
+	};
+
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
